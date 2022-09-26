@@ -9,3 +9,97 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Users{
+  id Int @id @default(autoincrement())
+  role String @default("Resident")
+
+  fname String
+  mname String
+  lname String
+  suffix String
+  sex String
+  mobileNo String
+
+  presAdd String
+  permAdd String
+  barangay Barangay @relation(fields: [brgyId],references: [id])
+  brgyId String
+
+  idType String
+  idNo String
+
+  status Int @default(0)
+}
+
+model Residents{
+  id Int @id
+  seniorType String 
+  emgContNum String 
+  emgContName String 
+  civilStatus String 
+  birthdate DateTime 
+  birthPlace DateTime
+  OSCAId String
+  empStatus String 
+  residencyStatus String 
+  transactions Transaction[]
+}
+
+model Barangay{
+  id String @id
+  zone String
+  district District @relation(fields: [districtId],references: [id])
+  districtId Int
+  users Users[]
+  programs Program[]
+}
+
+model District{
+  id Int @id @default(autoincrement())
+  name String
+  barangay Barangay[]
+}
+
+model Program{
+  id Int @id @default(autoincrement())
+  details String
+  view String
+  qualification String
+  barangay Barangay @relation(fields: [brgyId],references: [id])
+  brgyId String
+  status String
+  type String
+  schedules Schedule[]
+  transactions Transaction[]
+}
+
+model Schedule{
+  id Int @id @default(autoincrement())
+  startTime DateTime
+  endTime DateTime
+  date DateTime
+  location String
+  program Program @relation(fields: [programId],references: [id])
+  programId Int
+  transactions Transaction[]
+}
+
+model Transaction{
+  id Int @id @default(autoincrement())
+  resident Residents @relation(fields: [residentId],references: [id])
+  residentId Int
+  schedule Schedule @relation(fields: [scheduleId],references: [id])
+  scheduleId Int
+  program Program @relation(fields: [programId],references: [id])
+  programId Int
+  status String
+}
+
+model Announcements{
+  id Int @id @default(autoincrement())
+  dateAdded DateTime @default(now())
+  dateUpdated DateTime @default(now())
+  details String
+  barangay String
+}
