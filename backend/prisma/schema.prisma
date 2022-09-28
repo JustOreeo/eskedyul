@@ -12,7 +12,8 @@ datasource db {
 
 model Users{
   id Int @id @default(autoincrement())
-  role String @default("Resident")
+  role String
+  password String?
 
   fname String
   mname String
@@ -23,11 +24,12 @@ model Users{
 
   presAdd String
   permAdd String
-  barangay Barangay @relation(fields: [brgyId],references: [id])
+  barangay Barangay? @relation(fields: [brgyId],references: [id])
   brgyId String
 
   idType String
   idNo String
+  email String?
 
   status Int @default(0)
 }
