@@ -38,7 +38,7 @@ export default class UserUtil extends Prisma {
     try {
       const findNumber = await this.prisma.users.findFirst({
         where: {
-          mobileNo: this.data ? this.data.mobileNo : mobileNo,
+          mobileNo: mobileNo ? mobileNo : (this.data?.mobileNo as string),
         },
       });
 

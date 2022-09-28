@@ -18,14 +18,22 @@ export async function login(data: TLoginAdmin) {
     const User = new UserUtil({ data: undefined });
     const Encrypt = new Encryption(data.password);
 
-    const mobileNumber = await User.isNumberAvailable(data.mobileNo);
+    const mobileNumber = await User.isNumberAvailable(data.mobileNo as string);
 
     if (!mobileNumber) {
       throw new Error("MobileNo. does not exists please make an account");
     }
 
+    if (mobileNumber.role === "Resident") {
+      throw new Error("You are not an admin");
+    }
+
     if (!(await Encrypt.decryptPassword(mobileNumber.password as string))) {
       throw new Error("Wrong Password");
+    }
+
+    if (mobileNumber.status === 0) {
+      throw new Error("You are not activated yet");
     }
 
     return { ...mobileNumber };
