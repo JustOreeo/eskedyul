@@ -1,16 +1,20 @@
 import { Prisma } from "../../utils/prismaClient";
-import { TRegister } from "./userZod";
+import { TRegister, TRegisterResident } from "./userZod";
 
 export default class UserUtil extends Prisma {
   public data;
 
-  constructor(data: TRegister) {
+  constructor({ data }: { data: TRegister | undefined }) {
     super();
     this.data = data;
   }
 
   public async isNameAvailable() {
     try {
+      if (!this.data) {
+        throw new Error("Missing Fields");
+      }
+
       const { fname, lname, mname } = this.data;
       const findUser = await this.prisma.users.findFirst({
         where: {
@@ -19,8 +23,6 @@ export default class UserUtil extends Prisma {
           mname: mname,
         },
       });
-
-      console.log(findUser);
 
       if (findUser) {
         return false;
@@ -32,19 +34,19 @@ export default class UserUtil extends Prisma {
     }
   }
 
-  public async isNumberAvailable() {
+  public async isNumberAvailable(mobileNo?: string) {
     try {
       const findNumber = await this.prisma.users.findFirst({
         where: {
-          mobileNo: this.data.mobileNo,
+          mobileNo: this.data ? this.data.mobileNo : mobileNo,
         },
       });
 
-      if (findNumber) {
+      if (!findNumber) {
         return false;
       }
 
-      return true;
+      return findNumber;
     } catch (err: any) {
       throw new Error(err.message);
     }
@@ -52,6 +54,10 @@ export default class UserUtil extends Prisma {
 
   public async registerUser() {
     try {
+      if (!this.data) {
+        throw new Error("Missing Fields");
+      }
+
       const postUser = await this.prisma.users.create({
         data: {
           ...this.data,
@@ -59,6 +65,29 @@ export default class UserUtil extends Prisma {
       });
 
       return postUser;
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  }
+
+  public async registerResident(resData: TRegisterResident) {
+    try {
+      const postResident = await this.prisma.residents.create({
+        data: {
+          id: Number(resData.id),
+          birthdate: resData.birthdate.toString(),
+          birthPlace: resData.birthPlace.toString(),
+          civilStatus: resData.civilStatus.toString(),
+          emgContName: resData.emgContName.toString(),
+          emgContNum: resData.emgContNum.toString(),
+          empStatus: resData.empStatus.toString(),
+          OSCAId: resData.OSCAId ? resData.OSCAId.toString() : "",
+          residencyStatus: resData.residencyStatus.toString(),
+          seniorType: resData.seniorType.toString(),
+        },
+      });
+
+      return postResident;
     } catch (err: any) {
       throw new Error(err.message);
     }

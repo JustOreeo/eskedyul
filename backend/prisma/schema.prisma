@@ -40,9 +40,9 @@ model Residents{
   emgContNum String 
   emgContName String 
   civilStatus String 
-  birthdate DateTime 
-  birthPlace DateTime
-  OSCAId String
+  birthdate String 
+  birthPlace String
+  OSCAId String?
   empStatus String 
   residencyStatus String 
   transactions Transaction[]
@@ -82,18 +82,18 @@ model Schedule{
   endTime DateTime
   date DateTime
   location String
-  program Program @relation(fields: [programId],references: [id])
+  program Program? @relation(fields: [programId],references: [id])
   programId Int
   transactions Transaction[]
 }
 
 model Transaction{
   id Int @id @default(autoincrement())
-  resident Residents @relation(fields: [residentId],references: [id])
+  resident Residents? @relation(fields: [residentId],references: [id])
   residentId Int
-  schedule Schedule @relation(fields: [scheduleId],references: [id])
+  schedule Schedule? @relation(fields: [scheduleId],references: [id])
   scheduleId Int
-  program Program @relation(fields: [programId],references: [id])
+  program Program? @relation(fields: [programId],references: [id])
   programId Int
   status String
 }

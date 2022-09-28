@@ -13,4 +13,11 @@ export class Encryption {
 
     return hashedPass;
   }
+
+  public async decryptPassword(password: string) {
+    if (!(await bcrypt.compare(this.password, password))) {
+      return false;
+    }
+    return true;
+  }
 }

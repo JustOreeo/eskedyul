@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import expressAsyncHandler from "express-async-handler";
-import { login, registerAdmin } from "./controller";
+import { login, registerAdmin, registerResident } from "./controller";
 
 export default function userRoutes(router: Router) {
   router.route("/login").post(
@@ -11,11 +11,27 @@ export default function userRoutes(router: Router) {
     })
   );
 
-  router.route("/register/admin").post(
+  router.route("/register/:role").post(
     expressAsyncHandler(async (req: Request, res: Response) => {
-      const data = await registerAdmin(req.body);
+      const role = req.params.role;
 
-      res.json({ ...data });
+      if (role.toString() === "admin") {
+        const data = await registerAdmin(req.body);
+        res.json({ ...data });
+
+        return;
+      }
+
+      if (role.toString() === "resident") {
+        const data = await registerResident({
+          data: req.body.data,
+          residentData: req.body.residentData,
+        });
+
+        res.json({ ...data });
+
+        return;
+      }
     })
   );
 
