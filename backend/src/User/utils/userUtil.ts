@@ -20,6 +20,8 @@ export default class UserUtil extends Prisma {
         },
       });
 
+      console.log(findUser);
+
       if (findUser) {
         return false;
       }
