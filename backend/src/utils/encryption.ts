@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export class Encryption {
   private password;
@@ -19,5 +20,15 @@ export class Encryption {
       return false;
     }
     return true;
+  }
+
+  public decryptToken() {
+    return jwt.decode(this.password);
+  }
+
+  public generateToken(id: number, password: string) {
+    return jwt.sign({ id, password }, process.env.JWT_SECRET as string, {
+      expiresIn: "30d",
+    });
   }
 }

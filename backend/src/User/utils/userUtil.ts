@@ -70,6 +70,29 @@ export default class UserUtil extends Prisma {
     }
   }
 
+  public async findUserId(id: number) {
+    try {
+      const user = await this.prisma.users.findUnique({
+        where: {
+          id: Number(id),
+        },
+      });
+
+      if (!user) {
+        return false;
+      }
+
+      return {
+        id: user.id,
+        role: user.role,
+        email: user.email ? user.email : "",
+        mobileNo: user.mobileNo,
+      };
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  }
+
   public async registerResident(resData: TRegisterResident) {
     try {
       const postResident = await this.prisma.residents.create({
@@ -88,6 +111,23 @@ export default class UserUtil extends Prisma {
       });
 
       return postResident;
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  }
+
+  public async activateUser(id: number) {
+    try {
+      const activatedUser = await this.prisma.users.update({
+        where: {
+          id: id,
+        },
+        data: {
+          status: 1,
+        },
+      });
+
+      return activatedUser;
     } catch (err: any) {
       throw new Error(err.message);
     }

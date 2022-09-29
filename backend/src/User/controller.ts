@@ -36,7 +36,9 @@ export async function login(data: TLoginAdmin) {
       throw new Error("You are not activated yet");
     }
 
-    return { ...mobileNumber };
+    const token = Encrypt.generateToken(mobileNumber.id, data.password);
+
+    return { token, ...mobileNumber };
   } catch (err: any) {
     if (err instanceof ZodError) {
       throw new Error(
@@ -64,14 +66,12 @@ export async function registerAdmin(data: TRegister) {
     if (!userNameAvailable) {
       throw new Error("Name is already taken");
     }
-    if (!mobileAvailable) {
+    if (mobileAvailable) {
       throw new Error("Mobile No. is already taken");
     }
 
     const encrypt = new Encryption(data.password || "");
     const hashedPass = await encrypt.hashPassword();
-
-    data.password = hashedPass;
 
     if (!User.data) {
       throw new Error("Error Occured while excrypting password");
@@ -123,6 +123,30 @@ export async function registerResident({
     const postResident = await User.registerResident(residentData);
 
     return { ...postUser, ...postResident };
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      throw new Error(
+        err.issues[0].message || err.message || "There was an Error"
+      );
+    }
+
+    throw new Error(err.message || "There was an Error");
+  }
+}
+
+export async function activateUser(id: number) {
+  try {
+    const User = new UserUtil({ data: undefined });
+
+    const userExists = await User.findUserId(id);
+
+    if (!userExists) {
+      throw new Error("User does not Exists");
+    }
+
+    const activate = await User.activateUser(id);
+
+    return { ...activate };
   } catch (err: any) {
     if (err instanceof ZodError) {
       throw new Error(

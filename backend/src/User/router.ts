@@ -1,6 +1,12 @@
 import { Request, Response, Router } from "express";
 import expressAsyncHandler from "express-async-handler";
-import { login, registerAdmin, registerResident } from "./controller";
+import authHandler from "../middleWare/authHandler";
+import {
+  activateUser,
+  login,
+  registerAdmin,
+  registerResident,
+} from "./controller";
 
 export default function userRoutes(router: Router) {
   router.route("/login").post(
@@ -32,6 +38,19 @@ export default function userRoutes(router: Router) {
 
         return;
       }
+    })
+  );
+
+  router.route("/activate").post(
+    authHandler,
+    expressAsyncHandler(async (req: Request, res: Response) => {
+      if (!req.query.id) {
+        throw new Error("Please provide an ID");
+      }
+
+      const activate = await activateUser(Number(req.query.id));
+
+      res.json({ ...activate });
     })
   );
 

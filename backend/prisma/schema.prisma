@@ -64,11 +64,12 @@ model District{
 }
 
 model Program{
-  id Int @id @default(autoincrement())
+  id String @id
+  name String
   details String
   view String
   qualification String
-  barangay Barangay @relation(fields: [brgyId],references: [id])
+  barangay Barangay? @relation(fields: [brgyId],references: [id])
   brgyId String
   status String
   type String
@@ -77,13 +78,13 @@ model Program{
 }
 
 model Schedule{
-  id Int @id @default(autoincrement())
-  startTime DateTime
-  endTime DateTime
-  date DateTime
+  id String @id
+  startTime String
+  endTime String
+  date String
   location String
   program Program? @relation(fields: [programId],references: [id])
-  programId Int
+  programId String
   transactions Transaction[]
 }
 
@@ -92,9 +93,9 @@ model Transaction{
   resident Residents? @relation(fields: [residentId],references: [id])
   residentId Int
   schedule Schedule? @relation(fields: [scheduleId],references: [id])
-  scheduleId Int
+  scheduleId String
   program Program? @relation(fields: [programId],references: [id])
-  programId Int
+  programId String
   status String
 }
 
