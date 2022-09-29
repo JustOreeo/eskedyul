@@ -87,6 +87,7 @@ export default class UserUtil extends Prisma {
         role: user.role,
         email: user.email ? user.email : "",
         mobileNo: user.mobileNo,
+        brgyId: user.brgyId,
       };
     } catch (err: any) {
       throw new Error(err.message);

@@ -46,7 +46,7 @@ export async function getPrograms(id: string) {
   }
 }
 
-export async function updateProgram(data: TCreateProgram, id: number) {
+export async function updateProgram(data: TCreateProgram, id: string) {
   try {
     SCreateProgram.parse(data);
 
@@ -78,7 +78,7 @@ export async function updateProgram(data: TCreateProgram, id: number) {
   }
 }
 
-export async function deleteProgram(id: number) {
+export async function deleteProgram(id: string) {
   try {
     const Program = new ProgUtils();
 

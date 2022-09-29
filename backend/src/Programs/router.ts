@@ -46,10 +46,7 @@ export default function ProgramsRouter(router: Router) {
           throw new Error("Provide an ID");
         }
 
-        const data = await updateProgram(
-          req.body,
-          parseInt(req.query.id.toString())
-        );
+        const data = await updateProgram(req.body, req.query.id.toString());
 
         res.json({ ...data });
       })
@@ -65,7 +62,7 @@ export default function ProgramsRouter(router: Router) {
           throw new Error("Provide an ID");
         }
 
-        const data = await deleteProgram(parseInt(req.query.id.toString()));
+        const data = await deleteProgram(req.query.id.toString());
 
         res.json({ ...data });
       })

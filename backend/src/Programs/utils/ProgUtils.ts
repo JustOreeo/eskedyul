@@ -43,7 +43,7 @@ export class ProgUtils extends Prisma {
     }
   }
 
-  public async updateProgram(id: number) {
+  public async updateProgram(id: string) {
     try {
       if (!this.data) {
         throw new Error("Missing Fields");

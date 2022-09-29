@@ -1,9 +1,13 @@
 import { Request, Response, Router } from "express";
 import expressAsyncHandler from "express-async-handler";
 import authHandler from "../middleWare/authHandler";
-import { deleteSchedule, getSchedule, postSchedule } from "./controller";
+import {
+  getTransaction,
+  postTransaction,
+  updateTransaction,
+} from "./controller";
 
-export default function ScheduleRoutes(router: Router) {
+export default function TransactionRoutes(router: Router) {
   router
     .route("/")
     .post(
@@ -13,33 +17,42 @@ export default function ScheduleRoutes(router: Router) {
           throw new Error("Master Admin can only use this");
         }
 
-        const data = await postSchedule(req.body);
+        req.body.status = "Pending";
+        req.body.brgyId = req.user.brgyId;
+
+        const data = await postTransaction(req.body);
 
         res.json({ ...data });
       })
     )
     .get(
       expressAsyncHandler(async (req: Request, res: Response) => {
-        if (!req.query.id) {
+        if (!req.query.brgyId) {
           throw new Error("Provide an ID");
         }
 
-        const data = await getSchedule(req.query.id.toString());
+        const data = await getTransaction(req.query.brgyId.toString());
 
         res.json({ ...data });
       })
     )
-    .delete(
+    .put(
       authHandler,
       expressAsyncHandler(async (req: Request, res: Response) => {
         if (req.user.role !== "Master Admin") {
           throw new Error("Master Admin can only use this");
         }
+
         if (!req.query.id) {
           throw new Error("Provide an ID");
         }
 
-        const data = await deleteSchedule(parseInt(req.query.id.toString()));
+        req.body.brgyId = req.user.brgyId;
+
+        const data = await updateTransaction(
+          req.body,
+          parseInt(req.query.id.toString())
+        );
 
         res.json({ ...data });
       })

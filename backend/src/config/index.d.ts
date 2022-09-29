@@ -10,4 +10,5 @@ type Users = {
   email: string;
   password: string;
   mobileNo: string;
+  brgyId: string;
 };

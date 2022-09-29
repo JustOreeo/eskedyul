@@ -22,4 +22,26 @@ export class SchedUtils extends Prisma {
       throw new Error(err.message);
     }
   }
+
+  public async getSchedule(id: string) {
+    try {
+      const schedule = await this.prisma.schedule.findMany({
+        where: { programId: id },
+      });
+
+      return [...schedule];
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  }
+
+  public async deleteSchedule(id: number) {
+    try {
+      const schedule = await this.prisma.schedule.delete({ where: { id: id } });
+
+      return { ...schedule };
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  }
 }

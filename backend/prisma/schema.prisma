@@ -55,6 +55,7 @@ model Barangay{
   districtId Int
   users Users[]
   programs Program[]
+  transaction Transaction[]
 }
 
 model District{
@@ -78,7 +79,7 @@ model Program{
 }
 
 model Schedule{
-  id String @id
+  id Int @id @default(autoincrement())
   startTime String
   endTime String
   date String
@@ -93,9 +94,11 @@ model Transaction{
   resident Residents? @relation(fields: [residentId],references: [id])
   residentId Int
   schedule Schedule? @relation(fields: [scheduleId],references: [id])
-  scheduleId String
+  scheduleId Int
   program Program? @relation(fields: [programId],references: [id])
   programId String
+  barangay Barangay? @relation(fields: [brgyId],references: [id])
+  brgyId String
   status String
 }
 

@@ -7,7 +7,7 @@ export const SCreateSchedule = z.object({
   location: z
     .string()
     .min(3, { message: "Location need to be atleast 3 letters long" }),
-  programId: z.number().min(0),
+  programId: z.string(),
 });
 
 export type TCreateSchedule = z.infer<typeof SCreateSchedule>;
