@@ -34,6 +34,41 @@ export default class UserUtil extends Prisma {
     }
   }
 
+  public async getUsers(id: string) {
+    try {
+      const findUser = await this.prisma.users.findMany({
+        where: {
+          brgyId: id,
+        },
+        include: {
+          residents: true,
+        },
+      });
+
+      return [...findUser];
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  }
+
+  public async getResidents(id: string) {
+    try {
+      const findUser = await this.prisma.users.findMany({
+        where: {
+          brgyId: id,
+          role: "Resident",
+        },
+        include: {
+          residents: true,
+        },
+      });
+
+      return [...findUser];
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  }
+
   public async isNumberAvailable(mobileNo?: string) {
     try {
       const findNumber = await this.prisma.users.findFirst({
@@ -108,6 +143,7 @@ export default class UserUtil extends Prisma {
           OSCAId: resData.OSCAId ? resData.OSCAId.toString() : "",
           residencyStatus: resData.residencyStatus.toString(),
           seniorType: resData.seniorType.toString(),
+          userId: Number(resData.userId),
         },
       });
 

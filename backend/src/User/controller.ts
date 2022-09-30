@@ -112,13 +112,14 @@ export async function registerResident({
     if (!userNameAvailable) {
       throw new Error("Name is already taken");
     }
-    if (!mobileAvailable) {
+    if (mobileAvailable) {
       throw new Error("Mobile No. is already taken");
     }
 
     const postUser = await User.registerUser();
 
     residentData.id = postUser.id;
+    residentData.userId = postUser.id;
 
     const postResident = await User.registerResident(residentData);
 
@@ -147,6 +148,42 @@ export async function activateUser(id: number) {
     const activate = await User.activateUser(id);
 
     return { ...activate };
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      throw new Error(
+        err.issues[0].message || err.message || "There was an Error"
+      );
+    }
+
+    throw new Error(err.message || "There was an Error");
+  }
+}
+
+export async function getUsers(id: string) {
+  try {
+    const User = new UserUtil({ data: undefined });
+
+    const users = await User.getUsers(id);
+
+    return users.length > 0 ? { data: users } : { data: "No Data" };
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      throw new Error(
+        err.issues[0].message || err.message || "There was an Error"
+      );
+    }
+
+    throw new Error(err.message || "There was an Error");
+  }
+}
+
+export async function getResidents(id: string) {
+  try {
+    const User = new UserUtil({ data: undefined });
+
+    const users = await User.getResidents(id);
+
+    return users.length > 0 ? { data: users } : { data: "No Data" };
   } catch (err: any) {
     if (err instanceof ZodError) {
       throw new Error(

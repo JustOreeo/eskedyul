@@ -61,3 +61,49 @@ export async function updateTransaction(data: TTransaction, id: number) {
     throw new Error(err.message || "There was an Error");
   }
 }
+
+export async function deleteTransaction(id: number) {
+  try {
+    const Transaction = new TransUtils();
+
+    const checkID = await Transaction.findTransaction(id);
+
+    if (!checkID) {
+      throw new Error("Transaction does not exists");
+    }
+
+    const deleteTransaction = await Transaction.deleteTransaction(id);
+
+    return deleteTransaction;
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      throw new Error(
+        err.issues[0].message || err.message || "There was an Error"
+      );
+    }
+
+    throw new Error(err.message || "There was an Error");
+  }
+}
+
+export async function findTransaction(id: number) {
+  try {
+    const Transaction = new TransUtils();
+
+    const checkID = await Transaction.findTransaction(id);
+
+    if (!checkID) {
+      throw new Error("Transaction does not exists");
+    }
+
+    return checkID;
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      throw new Error(
+        err.issues[0].message || err.message || "There was an Error"
+      );
+    }
+
+    throw new Error(err.message || "There was an Error");
+  }
+}

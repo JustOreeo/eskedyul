@@ -1,3 +1,4 @@
+import UserUtil from "../../User/utils/userUtil";
 import { Prisma } from "../../utils/prismaClient";
 import { TTransaction } from "./transZod";
 
@@ -42,6 +43,40 @@ export class TransUtils extends Prisma {
     }
   }
 
+  public async findTransaction(id: number) {
+    try {
+      const transaction = await this.prisma.transaction.findUnique({
+        where: { id: id },
+        include: {
+          barangay: true,
+          resident: { include: { user: true } },
+          schedule: true,
+          program: true,
+        },
+      });
+
+      if (!transaction) {
+        return false;
+      }
+
+      return { ...transaction };
+    } catch (err: any) {
+      throw new Error(err.message || "There was an Error");
+    }
+  }
+
+  public async deleteTransaction(id: number) {
+    try {
+      const transaction = await this.prisma.transaction.delete({
+        where: { id: id },
+      });
+
+      return transaction;
+    } catch (err: any) {
+      throw new Error(err.message || "There was an Error");
+    }
+  }
+
   public async getTransaction(id: string) {
     try {
       const transaction = await this.prisma.transaction.findMany({
@@ -50,7 +85,7 @@ export class TransUtils extends Prisma {
         },
         include: {
           barangay: true,
-          resident: true,
+          resident: { include: { user: true } },
           schedule: true,
           program: true,
         },

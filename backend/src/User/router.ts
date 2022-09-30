@@ -3,12 +3,38 @@ import expressAsyncHandler from "express-async-handler";
 import authHandler from "../middleWare/authHandler";
 import {
   activateUser,
+  getResidents,
+  getUsers,
   login,
   registerAdmin,
   registerResident,
 } from "./controller";
 
 export default function userRoutes(router: Router) {
+  router.route("/").get(
+    expressAsyncHandler(async (req: Request, res: Response) => {
+      if (!req.query.id) {
+        throw new Error("Provide an ID");
+      }
+
+      const data = await getUsers(req.query.id.toString());
+
+      res.json({ ...data });
+    })
+  );
+
+  router.route("/residents").get(
+    expressAsyncHandler(async (req: Request, res: Response) => {
+      if (!req.query.id) {
+        throw new Error("Provide an ID");
+      }
+
+      const data = await getResidents(req.query.id.toString());
+
+      res.json({ ...data });
+    })
+  );
+
   router.route("/login").post(
     expressAsyncHandler(async (req: Request, res: Response) => {
       const data = await login(req.body);

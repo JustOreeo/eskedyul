@@ -38,6 +38,7 @@ export const SRegister = z.object({
 
 export const SRegisterResident = z.object({
   id: z.number().optional(),
+  userId: z.number().optional(),
   seniorType: z.enum(["OLD", "NEW"]),
   emgContNum: z.string().regex(/^0(9)\d{9}$/, { message: "Invalid Phone No." }),
   emgContName: z
