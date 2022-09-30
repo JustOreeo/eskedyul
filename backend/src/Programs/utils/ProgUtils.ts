@@ -66,6 +66,22 @@ export class ProgUtils extends Prisma {
         where: {
           id: id,
         },
+        include: {
+          schedules: true,
+        },
+      });
+
+      return program;
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  }
+  public async deleteEditingProgram() {
+    try {
+      const program = await this.prisma.program.deleteMany({
+        where: {
+          name: "Editing",
+        },
       });
 
       return program;
@@ -96,7 +112,7 @@ export class ProgUtils extends Prisma {
   public async getProgram(id: string) {
     try {
       const program = await this.prisma.program.findMany({
-        where: { brgyId: id },
+        where: { brgyId: id, name: { not: "Editing" } },
         include: {
           schedules: true,
           barangay: true,

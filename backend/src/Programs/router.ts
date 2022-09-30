@@ -19,6 +19,9 @@ export default function ProgramsRouter(router: Router) {
           throw new Error("Master Admin can only use this");
         }
 
+        req.body.brgyId = req.user.brgyId;
+        req.body.status = "Pending";
+
         const data = await createProgram(req.body);
 
         res.json({ ...data });
@@ -41,6 +44,8 @@ export default function ProgramsRouter(router: Router) {
         if (req.user.role !== "Master Admin") {
           throw new Error("Master Admin can only use this");
         }
+
+        req.body.brgyId = req.user.brgyId;
 
         if (!req.query.id) {
           throw new Error("Provide an ID");

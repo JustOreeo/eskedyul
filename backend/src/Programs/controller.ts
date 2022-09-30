@@ -10,7 +10,13 @@ export async function createProgram(data: TCreateProgram) {
 
     const checkName = await Program.findProgram();
 
-    if (checkName && checkName.brgyId === data.brgyId) {
+    await Program.deleteEditingProgram();
+
+    if (
+      checkName &&
+      checkName.brgyId === data.brgyId &&
+      checkName.name !== "Editing"
+    ) {
       throw new Error("Program name already exists");
     }
 
