@@ -109,6 +109,25 @@ export class ProgUtils extends Prisma {
     }
   }
 
+  public async statusToCancel(id: string) {
+    try {
+      const program = await this.prisma.transaction.updateMany({
+        where: { programId: id },
+        data: {
+          status: "Cancelled",
+        },
+      });
+
+      if (!program) {
+        return false;
+      }
+
+      return program;
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  }
+
   public async getProgram(id: string) {
     try {
       const program = await this.prisma.program.findMany({

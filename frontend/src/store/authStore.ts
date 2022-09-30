@@ -23,9 +23,11 @@ const AuthStore = create((set: any) => ({
 		set((state: any) => ({
 			...state,
 			userData: {
-				name: "",
+				fname: "",
 				id: "",
-				dept: "",
+				role: "",
+				token: "",
+				brgyId: "",
 			},
 		})),
 }));

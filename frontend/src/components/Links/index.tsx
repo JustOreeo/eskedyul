@@ -8,10 +8,19 @@ const Links = () => {
 			<Link href="/dashboard/programs">
 				<a
 					className={`${
-						router.pathname === "/dashboard/programs" ? "font-bold" : "font-light"
+						router.pathname.includes("/dashboard/programs") ? "font-bold" : "font-light"
 					} transition all`}
 				>
 					Programs
+				</a>
+			</Link>
+			<Link href="/dashboard/transactions">
+				<a
+					className={`${
+						router.pathname.includes("/dashboard/transactions") ? "font-bold" : "font-light"
+					} transition all`}
+				>
+					Transactions
 				</a>
 			</Link>
 		</div>

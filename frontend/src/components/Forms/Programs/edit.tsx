@@ -1,16 +1,16 @@
 import { FormEvent, useEffect, useState } from "react";
-import handleChange from "../../../../hooks/handleChange";
-import md5 from "md5";
+import handleChange from "../../../hooks/handleChange";
 import useFormController from "./formController";
 import { toast } from "react-toastify";
 
-const AddForm = () => {
+const EditForm = ({ id }: { id?: string }) => {
 	const [programData, setProgramData] = useState({
 		id: "",
 		name: "",
 		details: "",
 		view: "",
 		qualification: "",
+		status: "",
 		type: "",
 	});
 	const controller = useFormController(programData.id);
@@ -23,25 +23,27 @@ const AddForm = () => {
 	});
 
 	const { data, isSuccess } = controller.getSchedule(programData.id);
+	const { data: prog, isSuccess: SuccProg } = controller.getProgramById(programData.id);
 
 	useEffect(() => {
-		setProgramData((data) => ({ ...data, id: md5(new Date().toString()) }));
-	}, []);
-	useEffect(() => {
-		if (programData.id !== "") {
-			controller.postProgram(
-				{
-					id: programData.id,
-					name: "Editing",
-					details: "Editing",
-					view: "All",
-					qualification: "6months of Residency",
-					type: "Goods Aid",
-				},
-				"First"
-			);
+		if (SuccProg) {
+			setProgramData({
+				id: prog.id,
+				name: prog.name,
+				details: prog.details,
+				view: prog.view,
+				qualification: prog.qualification,
+				status: prog.status,
+				type: prog.type,
+			});
 		}
-	}, [programData.id]);
+	}, [prog, SuccProg]);
+
+	useEffect(() => {
+		if (id) {
+			setProgramData((data) => ({ ...data, id: id }));
+		}
+	}, [id]);
 
 	function submitSched() {
 		schedData.programId = programData.id;
@@ -57,12 +59,24 @@ const AddForm = () => {
 			return;
 		}
 
-		await controller.postProgram({ ...programData, status: "Pending" }, "Main");
+		await controller.postProgram({ ...programData }, "Main");
 	}
 
 	return (
 		<div className="card bg-base-100 shadow-xl p-5 w-[30rem] rounded-md">
 			<form className="w-full flex flex-col" onSubmit={submitProgram}>
+				<h1>Status:</h1>
+				<select
+					className="select select-bordered w-full"
+					name="status"
+					value={programData.status}
+					onChange={(e) => handleChange(e, setProgramData)}
+				>
+					<option value=""></option>
+					<option value="Pending">Pending</option>
+					<option value="Ongoing">On Going</option>
+					<option value="Completed">Completed</option>
+				</select>
 				<h1>Name:</h1>
 				<input
 					type="text"
@@ -76,14 +90,14 @@ const AddForm = () => {
 				<h1>Details:</h1>
 				<textarea
 					name="details"
-					className="input input-bordered w-full"
+					className="input input-bordered w-full pt-3 min-h-[5rem]"
 					value={programData.details}
 					onChange={(e) => handleChange(e, setProgramData)}
 				/>
 
 				<h1>View:</h1>
 				<select
-					className="select select-bordered w-full max-w-xs"
+					className="select select-bordered w-full"
 					name="view"
 					value={programData.view}
 					onChange={(e) => handleChange(e, setProgramData)}
@@ -97,7 +111,7 @@ const AddForm = () => {
 
 				<h1>Qualification:</h1>
 				<select
-					className="select select-bordered w-full max-w-xs"
+					className="select select-bordered w-full"
 					name="qualification"
 					value={programData.qualification}
 					onChange={(e) => handleChange(e, setProgramData)}
@@ -109,7 +123,7 @@ const AddForm = () => {
 
 				<h1>Type:</h1>
 				<select
-					className="select select-bordered w-full max-w-xs"
+					className="select select-bordered w-full"
 					name="type"
 					value={programData.type}
 					onChange={(e) => handleChange(e, setProgramData)}
@@ -222,4 +236,4 @@ const AddForm = () => {
 	);
 };
 
-export default AddForm;
+export default EditForm;

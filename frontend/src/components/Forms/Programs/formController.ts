@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
-import { getSchedule } from "../../../../hooks/useProgramApi";
+import { getProgramsID, getSchedule } from "../../../hooks/useProgramApi";
 import useFormModel from "./formModel";
 
 const useFormController = (id: string) => {
@@ -9,6 +9,12 @@ const useFormController = (id: string) => {
 	return {
 		getSchedule(id: string) {
 			return useQuery(["schedule", id], () => getSchedule(id), {
+				refetchOnMount: false,
+				refetchOnWindowFocus: false,
+			});
+		},
+		getProgramById(id: string) {
+			return useQuery(["program", id], () => getProgramsID(id), {
 				refetchOnMount: false,
 				refetchOnWindowFocus: false,
 			});
@@ -35,6 +41,7 @@ const useFormController = (id: string) => {
 					return;
 				}
 				await model.updateProgram(data);
+				return;
 			}
 
 			await model.postProgram(data);

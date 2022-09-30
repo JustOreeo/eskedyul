@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import AddForm from "../../../components/Forms/Programs/add";
+import AddTransac from "../../../components/Forms/Transaction/add";
 import AuthStore from "../../../store/authStore";
 
 const AddPrograms = () => {
@@ -13,9 +13,9 @@ const AddPrograms = () => {
 		}
 	}, [token, router]);
 	return (
-		<div className="flex justify-center items-center gap-6 p-5">
-			<h1 className="font-extrabold text-4xl">ADD A PROGRAM</h1>
-			<AddForm />
+		<div className="flex justify-center items-center gap-6 p-5 min-h-[90vh]">
+			<h1 className="font-extrabold text-4xl">ADD A TRANSACTION</h1>
+			<AddTransac />
 		</div>
 	);
 };

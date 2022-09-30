@@ -9,7 +9,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 	return (
 		<div data-theme={theme}>
-			<div className="">
+			<div className="font-pop">
 				{router.pathname.includes("/dashboard") ? (
 					<Sidebar>{children}</Sidebar>
 				) : (

@@ -7,8 +7,8 @@ import {
 	postProgram,
 	postSchedule,
 	updatePrograms,
-} from "../../../../hooks/useProgramApi";
-import AuthStore from "../../../../store/authStore";
+} from "../../../hooks/useProgramApi";
+import AuthStore from "../../../store/authStore";
 
 const useFormModel = (id: string) => {
 	const router = useRouter();
@@ -82,7 +82,8 @@ const useFormModel = (id: string) => {
 				autoClose: 500,
 				closeOnClick: true,
 			});
-			router.push("/dashboard");
+			refetch();
+			router.push("/dashboard/programs");
 		},
 		onError: (err: any) => {
 			toast.update("loadSched", {

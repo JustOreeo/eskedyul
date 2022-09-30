@@ -5,3 +5,9 @@ export default async function loginUser(data: { mobileNo: string; password: stri
 
 	return res.data;
 }
+
+export async function getUsers(id: string) {
+	const res = await api.get("/user", { params: { id: id } });
+
+	return res.data;
+}

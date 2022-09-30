@@ -66,7 +66,7 @@ export async function updateProgram(data: TCreateProgram, id: string) {
 
     const checkName = await Program.findProgram();
 
-    if (checkName && checkName.brgyId === data.brgyId) {
+    if (findId.id !== id && findId.brgyId === data.brgyId && checkName) {
       throw new Error("Program name already exists");
     }
 
@@ -94,6 +94,7 @@ export async function deleteProgram(id: string) {
       throw new Error("Program does not exists");
     }
 
+    await Program.statusToCancel(id);
     const deleted = await Program.deleteProgram(id);
 
     return deleted;

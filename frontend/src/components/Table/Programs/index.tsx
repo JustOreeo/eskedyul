@@ -1,9 +1,10 @@
+import Link from "next/link";
 import AuthStore from "../../../store/authStore";
 import useProgramController from "./programController";
 
 const ProgramsTable = () => {
-	const controller = useProgramController();
 	const brgyId = AuthStore((state) => state.userData.brgyId);
+	const controller = useProgramController(brgyId);
 
 	const { data, isSuccess, isLoading } = controller.getPrograms(brgyId);
 
@@ -16,8 +17,10 @@ const ProgramsTable = () => {
 							<th className="sticky top-0 px-6 py-3">NAME</th>
 							<th className="sticky top-0 px-6 py-3">DETAILS</th>
 							<th className="sticky top-0 px-6 py-3">QUALIFICATIONS</th>
-							<th className="sticky top-0 px-6 py-3 w-[8rem]">VIEW</th>
-							<th className="sticky top-0 px-6 py-3 w-[10rem]">status</th>
+							<th className="sticky top-0 px-6 py-3 w-[5rem]">VIEW</th>
+							<th className="sticky top-0 px-6 py-3 w-[8rem]">STATUS</th>
+							<th className="sticky top-0 px-6 py-3 w-6"></th>
+							<th className="sticky top-0 px-6 py-3 w-6"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -28,7 +31,7 @@ const ProgramsTable = () => {
 								<td className="text-center"></td>
 							</tr>
 						)}
-						{isSuccess &&
+						{isSuccess && data.data !== "No Data" ? (
 							data.data.map((program: any) => (
 								<tr key={program.id}>
 									<td className="">{program.name}</td>
@@ -36,8 +39,37 @@ const ProgramsTable = () => {
 									<td className="">{program.qualification}</td>
 									<td className="">{program.view}</td>
 									<td className="text-center">{program.status}</td>
+									<td>
+										<Link href={`/dashboard/programs/edit/${program.id}`}>
+											<a className="btn btn-ghost">Edit</a>
+										</Link>
+									</td>
+									<td>
+										<button
+											className="btn btn-ghost"
+											onClick={() => controller.deleteProgram(program.id)}
+										>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												fill="none"
+												viewBox="0 0 24 24"
+												strokeWidth={1.5}
+												stroke="currentColor"
+												className="w-6 h-6"
+											>
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+												/>
+											</svg>
+										</button>
+									</td>
 								</tr>
-							))}
+							))
+						) : (
+							<tr className="btn btn-ghost">No Data</tr>
+						)}
 					</tbody>
 				</table>
 			</div>
