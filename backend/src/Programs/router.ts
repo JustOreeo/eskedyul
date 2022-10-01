@@ -84,5 +84,17 @@ export default function ProgramsRouter(router: Router) {
       res.json({ ...data });
     })
   );
+
+  router.route("/reports").get(
+    expressAsyncHandler(async (req: Request, res: Response) => {
+      if (!req.query.id) {
+        throw new Error("Provide a Program ID");
+      }
+
+      const data = await findProgram(req.query.id.toString());
+
+      res.json({ ...data });
+    })
+  );
   return router;
 }

@@ -129,3 +129,27 @@ export async function findProgram(id: string) {
     throw new Error(err.message || "There was an Error");
   }
 }
+
+export async function getReports(id: string) {
+  try {
+    const Program = new ProgUtils();
+
+    const findId = await Program.findId(id);
+
+    if (!findId) {
+      throw new Error("Program does not exists");
+    }
+
+    const report = await Program.getReport(id);
+
+    return report;
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      throw new Error(
+        err.issues[0].message || err.message || "There was an Error"
+      );
+    }
+
+    throw new Error(err.message || "There was an Error");
+  }
+}

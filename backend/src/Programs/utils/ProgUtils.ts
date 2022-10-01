@@ -90,6 +90,52 @@ export class ProgUtils extends Prisma {
     }
   }
 
+  public async getReport(id: string) {
+    try {
+      const pending = await this.prisma.transaction.findMany({
+        where: {
+          status: "Pending",
+          program: {
+            id: id,
+          },
+        },
+        select: {
+          id: true,
+          program: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
+      const completed = await this.prisma.transaction.findMany({
+        where: {
+          status: "Completed",
+          program: {
+            id: id,
+          },
+        },
+      });
+      const cancelled = await this.prisma.transaction.findMany({
+        where: {
+          status: "Cancelled",
+          program: {
+            id: id,
+          },
+        },
+      });
+
+      return {
+        prog: pending,
+        pending: pending.length,
+        completed: completed.length,
+        cancelled: cancelled.length,
+      };
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  }
+
   public async findId(id: string) {
     try {
       const program = await this.prisma.program.findUnique({
