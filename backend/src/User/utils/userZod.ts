@@ -33,7 +33,6 @@ export const SRegister = z.object({
   brgyId: z.string(),
   idType: z.string(),
   idNo: z.string(),
-  status: z.number().min(0).max(1),
 });
 
 export const SRegisterResident = z.object({
