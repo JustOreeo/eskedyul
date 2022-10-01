@@ -145,7 +145,10 @@ export async function activateUser(id: number) {
       throw new Error("User does not Exists");
     }
 
-    const activate = await User.activateUser(id);
+    const activate = await User.activateUser(
+      id,
+      userExists.status === 0 ? 1 : 0
+    );
 
     return { ...activate };
   } catch (err: any) {

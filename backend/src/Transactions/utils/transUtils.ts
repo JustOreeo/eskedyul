@@ -49,7 +49,7 @@ export class TransUtils extends Prisma {
         where: { id: id },
         include: {
           barangay: true,
-          resident: { include: { user: true } },
+          residents: { include: { users: true } },
           schedule: true,
           program: true,
         },
@@ -85,7 +85,7 @@ export class TransUtils extends Prisma {
         },
         include: {
           barangay: true,
-          resident: { include: { user: true } },
+          residents: { include: { users: true } },
           schedule: true,
           program: true,
         },

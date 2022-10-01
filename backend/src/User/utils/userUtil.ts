@@ -123,6 +123,7 @@ export default class UserUtil extends Prisma {
         email: user.email ? user.email : "",
         mobileNo: user.mobileNo,
         brgyId: user.brgyId,
+        status: user.status,
       };
     } catch (err: any) {
       throw new Error(err.message);
@@ -153,14 +154,14 @@ export default class UserUtil extends Prisma {
     }
   }
 
-  public async activateUser(id: number) {
+  public async activateUser(id: number, status: number) {
     try {
       const activatedUser = await this.prisma.users.update({
         where: {
           id: id,
         },
         data: {
-          status: 1,
+          status: status,
         },
       });
 

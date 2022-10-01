@@ -67,7 +67,7 @@ export class ProgUtils extends Prisma {
           id: id,
         },
         include: {
-          schedules: true,
+          schedule: true,
         },
       });
 
@@ -95,7 +95,7 @@ export class ProgUtils extends Prisma {
       const program = await this.prisma.program.findUnique({
         where: { id: id },
         include: {
-          schedules: true,
+          schedule: true,
         },
       });
 
@@ -133,7 +133,7 @@ export class ProgUtils extends Prisma {
       const program = await this.prisma.program.findMany({
         where: { brgyId: id, name: { not: "Editing" } },
         include: {
-          schedules: true,
+          schedule: true,
           barangay: true,
         },
       });
