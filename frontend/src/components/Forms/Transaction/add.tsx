@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import handleChange from "../../../hooks/handleChange";
 import useFormController from "./formController";
 import ComboBox from "react-responsive-combo-box";
@@ -27,7 +27,7 @@ const AddTransac = () => {
 	const names = useMemo(() => {
 		if (userSuccess) {
 			const residentFilter = users.data.filter((user: any) => {
-				return user.role === "Resident";
+				return user.role === "Resident" && user.status === 1;
 			});
 
 			const namesArr = residentFilter.map((user: any) => {
@@ -85,7 +85,7 @@ const AddTransac = () => {
 				>
 					<option value=""></option>
 					{schedData && schedSuccess && schedData.data !== "No Data" ? (
-						schedData.schedules.map((sched: any) => (
+						schedData.schedule.map((sched: any) => (
 							<option value={sched.id} key={sched.id} className="flex flex-col h-max">
 								{`Location: ${sched.location}   Date: ${sched.date}     Time: ${sched.startTime}-${sched.endTime}  `}
 							</option>

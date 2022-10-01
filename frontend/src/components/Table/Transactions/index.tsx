@@ -34,7 +34,7 @@ const TransactionTable = () => {
 						{isSuccess && data.data !== "No Data" ? (
 							data.data.map((transaction: any) => (
 								<tr key={transaction.id}>
-									<td className="">{`${transaction.resident.user.lname}, ${transaction.resident.user.fname} ${transaction.resident.user.mname}`}</td>
+									<td className="">{`${transaction.residents.users.lname}, ${transaction.residents.users.fname} ${transaction.residents.users.mname}`}</td>
 									<td className="w-[15rem] truncate">
 										{transaction.program ? transaction.program.name : "Deleted"}
 									</td>

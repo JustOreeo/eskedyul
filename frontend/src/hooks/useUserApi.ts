@@ -11,3 +11,14 @@ export async function getUsers(id: string) {
 
 	return res.data;
 }
+
+export async function activateUser({ id, token }: { id: string; token: string }) {
+	const res = await api.post("/user/activate", null, {
+		params: { id: id },
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+
+	return res.data;
+}
